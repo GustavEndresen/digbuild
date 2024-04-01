@@ -258,9 +258,11 @@ def generate_chunk(info):
 
     for x in range(w):
         for y in range(h):
+            
             for z in range(d):
                 
-                if (y < pnoise2((x + _x * w) / w, (z + _y * d) / d) * 40 + 10):
+                noise = (pnoise2((x + _x * w) / w * 0.25, (z + _y * d) / d * 0.25)  + 0.25 * pnoise2((x + _x * w) * 2 / w, (z + _y * d) * 2 / d)) * 20 + 10
+                if (y < noise):
                     grid[x][y][z] = Block(3)
             
                 elif y < 3:
@@ -412,7 +414,7 @@ def main():
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     glActiveTexture(GL_TEXTURE0)
-    glBindTexture(GL_TEXTURE_2D, load_texture('dirt.png'))
+    glBindTexture(GL_TEXTURE_2D, load_texture('digbuild/dirt.png'))
     glUniform1i(glGetUniformLocation(shader_program, "texture1"), 0)
     
     rot = 0
@@ -427,11 +429,11 @@ def main():
     max_chunks = 256
     world_width = int(np.sqrt(max_chunks))
     chunks = []
-    # for x in range(world_width):
-    #     for y in range(world_width):
-    #         chunks.append(generate_chunk((x - int(world_width/2), y - int(world_width/2), x * world_width + y)))
+    for x in range(world_width):
+        for y in range(world_width):
+            chunks.append(generate_chunk((x - int(world_width/2), y - int(world_width/2), x * world_width + y)))
       
-    #         print(np.round(((x * world_width + y) / max_chunks * 100), 3), "%")
+            print(np.round(((x * world_width + y) / max_chunks * 100), 3), "%")
          
     
  
